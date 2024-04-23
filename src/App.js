@@ -88,7 +88,7 @@ function App() {
     fetchToken();
     setLikedMusic(JSON.parse(localStorage.getItem("likedMusic")));
     setpinnedMusic(JSON.parse(localStorage.getItem("pinnedMusic")));
-  }, [fetchMusicData, setIsLoading, setLikedMusic, setpinnedMusic]);
+  }, [setIsLoading, setLikedMusic, setpinnedMusic]);
 
   return (
     <>

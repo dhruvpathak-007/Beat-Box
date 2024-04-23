@@ -1,0 +1,19 @@
+# Dependency directories
+node_modules/
+dist/
+
+# Environment variables
+.env
+
+# IDE/Editor specific files
+.vscode/
+*.sublime-project
+*.sublime-workspace
+*.idea/
+*.iml
+*.ipr
+*.iws
+
+# Logs and databases
+*.log
+*.sqlite
