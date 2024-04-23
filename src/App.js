@@ -88,12 +88,7 @@ function App() {
     fetchToken();
     setLikedMusic(JSON.parse(localStorage.getItem("likedMusic")));
     setpinnedMusic(JSON.parse(localStorage.getItem("pinnedMusic")));
-  }, []);
-
-  // useEffect(() => {
-  //   setResultOffset(0);
-  //   fetchMusicData();
-  // }, [defaultKeyword]);
+  }, [fetchMusicData, setIsLoading, setLikedMusic, setpinnedMusic]);
 
   return (
     <>
