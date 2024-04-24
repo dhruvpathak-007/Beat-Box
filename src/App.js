@@ -88,7 +88,8 @@ function App() {
     fetchToken();
     setLikedMusic(JSON.parse(localStorage.getItem("likedMusic")));
     setpinnedMusic(JSON.parse(localStorage.getItem("pinnedMusic")));
-  }, [setIsLoading, setLikedMusic, setpinnedMusic]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <>
