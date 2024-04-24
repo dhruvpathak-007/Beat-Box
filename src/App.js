@@ -37,7 +37,9 @@ function App() {
       );
 
       if (!response.ok) {
-        throw new Error("Failed to fetch music data");
+        throw new Error(
+          "If songs doesn't load initially, please type search keyword..."
+        );
       }
 
       const jsonData = await response.json();
