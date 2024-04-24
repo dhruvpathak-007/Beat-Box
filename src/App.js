@@ -60,7 +60,6 @@ function App() {
 
   useEffect(() => {
     initializePlaylist();
-    fetchMusicData(defaultKeyword);
 
     // current client credentials will be deleted in few days
     const fetchToken = async () => {
@@ -79,6 +78,7 @@ function App() {
 
         const jsonData = await response.json();
         setToken(jsonData.access_token);
+        fetchMusicData(defaultKeyword);
       } catch (error) {
         setMessage(error.message);
       } finally {
@@ -86,6 +86,7 @@ function App() {
       }
     };
     fetchToken();
+
     setLikedMusic(JSON.parse(localStorage.getItem("likedMusic")));
     setpinnedMusic(JSON.parse(localStorage.getItem("pinnedMusic")));
     // eslint-disable-next-line react-hooks/exhaustive-deps
