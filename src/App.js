@@ -35,17 +35,18 @@ function App() {
           },
         }
       );
+      const jsonData = await response.json();
 
+      console.log("response$$$", response);
       if (!response.ok) {
         throw new Error(
           "If songs doesn't load initially, please type search keyword..."
         );
       }
 
-      const jsonData = await response.json();
-
       setTracks(jsonData.tracks.items);
     } catch (error) {
+      console.log("erro***", error);
       setMessage(error.message);
     } finally {
       setIsLoading(false);
@@ -59,41 +60,139 @@ function App() {
     }
   };
 
+  // useEffect(() => {
+  //   initializePlaylist();
+
+  //   // current client credentials will be deleted in few days
+  //   const fetchToken = async () => {
+  //     try {
+  //       const response = await fetch("https://accounts.spotify.com/api/token", {
+  //         method: "POST",
+  //         headers: {
+  //           "Content-Type": "application/x-www-form-urlencoded",
+  //         },
+  //         body: "grant_type=client_credentials&client_id=a77073181b7d48eb90003e3bb94ff88a&client_secret=68790982a0554d1a83427e061e371507",
+  //       });
+
+  //       if (!response.ok) {
+  //         throw new Error("Failed to fetch token");
+  //       }
+
+  //       const jsonData = await response.json();
+  //       setToken(jsonData.access_token);
+  //       // fetchMusicData(defaultKeyword);
+  //     } catch (error) {
+  //       setMessage(error.message);
+  //     } finally {
+  //       setIsLoading(false);
+  //     }
+  //   };
+  //   fetchToken();
+
+  //   setLikedMusic(JSON.parse(localStorage.getItem("likedMusic")));
+  //   setpinnedMusic(JSON.parse(localStorage.getItem("pinnedMusic")));
+  //   fetchMusicData(defaultKeyword);
+
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [setIsLoading, setLikedMusic, setpinnedMusic, setToken]);
+  // useEffect(() => {
+  //   initializePlaylist();
+
+  //   // current client credentials will be deleted in few days
+  //   const fetchData = async () => {
+  //     try {
+  //       const tokenResponse = await fetch(
+  //         "https://accounts.spotify.com/api/token",
+  //         {
+  //           method: "POST",
+  //           headers: {
+  //             "Content-Type": "application/x-www-form-urlencoded",
+  //           },
+  //           body: "grant_type=client_credentials&client_id=a77073181b7d48eb90003e3bb94ff88a&client_secret=68790982a0554d1a83427e061e371507",
+  //         }
+  //       );
+
+  //       if (!tokenResponse.ok) {
+  //         throw new Error("Failed to fetch token");
+  //       }
+
+  //       const tokenJsonData = await tokenResponse.json();
+  //       setToken(tokenJsonData.access_token);
+
+  //       const musicResponse = await fetchMusicData(defaultKeyword);
+  //       if (!musicResponse.ok) {
+  //         throw new Error("Failed to fetch music data");
+  //       }
+
+  //       const musicJsonData = await musicResponse.json();
+  //       setTracks(musicJsonData.tracks.items);
+  //     } catch (error) {
+  //       setMessage(error.message);
+  //     } finally {
+  //       setIsLoading(false);
+  //     }
+  //   };
+
+  //   fetchData();
+
+  //   setLikedMusic(JSON.parse(localStorage.getItem("likedMusic")));
+  //   setpinnedMusic(JSON.parse(localStorage.getItem("pinnedMusic")));
+
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [setIsLoading, setLikedMusic, setpinnedMusic]);
+
   useEffect(() => {
     initializePlaylist();
 
     // current client credentials will be deleted in few days
-    const fetchToken = async () => {
+    const fetchData = async () => {
       try {
-        const response = await fetch("https://accounts.spotify.com/api/token", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/x-www-form-urlencoded",
-          },
-          body: "grant_type=client_credentials&client_id=a77073181b7d48eb90003e3bb94ff88a&client_secret=68790982a0554d1a83427e061e371507",
-        });
+        const tokenResponse = await fetch(
+          "https://accounts.spotify.com/api/token",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/x-www-form-urlencoded",
+            },
+            body: "grant_type=client_credentials&client_id=a77073181b7d48eb90003e3bb94ff88a&client_secret=68790982a0554d1a83427e061e371507",
+          }
+        );
 
-        if (!response.ok) {
+        if (!tokenResponse.ok) {
           throw new Error("Failed to fetch token");
         }
 
+        const tokenJsonData = await tokenResponse.json();
+        setToken(tokenJsonData.access_token);
+
+        const response = await fetch(
+          `https://api.spotify.com/v1/search?q=${defaultKeyword}&type=track&offset=${resultOffset}`,
+          {
+            headers: {
+              Authorization: `Bearer ${tokenJsonData.access_token}`,
+            },
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch music data");
+        }
+
         const jsonData = await response.json();
-        setToken(jsonData.access_token);
-        // fetchMusicData(defaultKeyword);
+        setTracks(jsonData.tracks.items);
       } catch (error) {
         setMessage(error.message);
       } finally {
         setIsLoading(false);
       }
     };
-    fetchToken();
+
+    fetchData();
 
     setLikedMusic(JSON.parse(localStorage.getItem("likedMusic")));
     setpinnedMusic(JSON.parse(localStorage.getItem("pinnedMusic")));
-    fetchMusicData(defaultKeyword);
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [setIsLoading, setLikedMusic, setpinnedMusic, setToken]);
+  }, [setIsLoading, setLikedMusic, setpinnedMusic]);
 
   return (
     <>

@@ -10,24 +10,10 @@ function Card({ element }) {
   const currentPlayingUrl = musicContext.currentPlayingUrl;
   const setCurrentPlayingUrl = musicContext.setCurrentPlayingUrl;
 
-  // const handlePlay = (url) => {
-  //   console.log("Clicked song URL:", url);
-  //   console.log("Current playing URL:", currentPlayingUrl);
-  //   if (currentPlayingUrl !== url) {
-  //     console.log("Pausing other songs...");
-  //     const audioElements = document.querySelectorAll("audio");
-  //     audioElements.forEach((audio) => audio.pause());
-  //     setCurrentPlayingUrl(url);
-  //   }
-  // };
   const handlePlay = (url) => {
-    console.log("Clicked song URL:", url);
     setCurrentPlayingUrl(url);
-    console.log("Current playing URL:", currentPlayingUrl);
 
-    // Pause currently playing song, if any
     if (currentPlayingUrl) {
-      console.log("Pausing current song...");
       const audioElement = document.querySelector(
         `audio[src="${currentPlayingUrl}"]`
       );
@@ -36,8 +22,6 @@ function Card({ element }) {
       }
     }
 
-    // Start new song
-    console.log("Starting new song...");
     const audioElementToPlay = document.querySelector(`audio[src="${url}"]`);
     if (audioElementToPlay) {
       audioElementToPlay.play();
