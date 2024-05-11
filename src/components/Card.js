@@ -7,6 +7,43 @@ function Card({ element }) {
   const setlikedMusic = musicContext.setLikedMusic;
   const pinnedMusic = musicContext.pinnedMusic;
   const setpinnedMusic = musicContext.setPinnedMusic;
+  const currentPlayingUrl = musicContext.currentPlayingUrl;
+  const setCurrentPlayingUrl = musicContext.setCurrentPlayingUrl;
+
+  // const handlePlay = (url) => {
+  //   console.log("Clicked song URL:", url);
+  //   console.log("Current playing URL:", currentPlayingUrl);
+  //   if (currentPlayingUrl !== url) {
+  //     console.log("Pausing other songs...");
+  //     const audioElements = document.querySelectorAll("audio");
+  //     audioElements.forEach((audio) => audio.pause());
+  //     setCurrentPlayingUrl(url);
+  //   }
+  // };
+  const handlePlay = (url) => {
+    console.log("Clicked song URL:", url);
+    setCurrentPlayingUrl(url);
+    console.log("Current playing URL:", currentPlayingUrl);
+
+    // Pause currently playing song, if any
+    if (currentPlayingUrl) {
+      console.log("Pausing current song...");
+      const audioElement = document.querySelector(
+        `audio[src="${currentPlayingUrl}"]`
+      );
+      if (audioElement) {
+        audioElement.pause();
+      }
+    }
+
+    // Start new song
+    console.log("Starting new song...");
+    const audioElementToPlay = document.querySelector(`audio[src="${url}"]`);
+    if (audioElementToPlay) {
+      audioElementToPlay.play();
+      setCurrentPlayingUrl(url);
+    }
+  };
 
   const handlePin = () => {
     let pinnedMusic = localStorage.getItem("pinnedMusic");
@@ -128,7 +165,12 @@ function Card({ element }) {
           <p className="card-text">
             Release date: {element.album.release_date}
           </p>
-          <audio src={element.preview_url} controls className="w-100"></audio>
+          <audio
+            src={element.preview_url}
+            controls
+            onPlay={() => handlePlay(element.preview_url)}
+            className="w-100"
+          ></audio>
         </div>
       </div>
     </div>

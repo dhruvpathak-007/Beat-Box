@@ -7,7 +7,7 @@ import Navbar from "./components/Navbar";
 import { MusicContext } from "./Context";
 
 function App() {
-  const defaultKeyword = "Sanam";
+  const defaultKeyword = "Isq Tera";
   const [keyword, setKeyword] = useState("");
   const [message, setMessage] = useState("");
   const [tracks, setTracks] = useState([]);
@@ -20,9 +20,9 @@ function App() {
   const setpinnedMusic = musicContext.setPinnedMusic;
   const resultOffset = musicContext.resultOffset;
   const setResultOffset = musicContext.setResultOffset;
+  const currentPlayingUrl = musicContext.currentPlayingUrl;
 
   const fetchMusicData = async (keyword) => {
-    console.log("keyword is", keyword);
     setTracks([]);
     window.scrollTo(0, 0);
     setIsLoading(true);
@@ -43,7 +43,6 @@ function App() {
       }
 
       const jsonData = await response.json();
-      // console.log(jsonData);
 
       setTracks(jsonData.tracks.items);
     } catch (error) {
@@ -80,7 +79,7 @@ function App() {
 
         const jsonData = await response.json();
         setToken(jsonData.access_token);
-        fetchMusicData(defaultKeyword);
+        // fetchMusicData(defaultKeyword);
       } catch (error) {
         setMessage(error.message);
       } finally {
@@ -91,6 +90,8 @@ function App() {
 
     setLikedMusic(JSON.parse(localStorage.getItem("likedMusic")));
     setpinnedMusic(JSON.parse(localStorage.getItem("pinnedMusic")));
+    fetchMusicData(defaultKeyword);
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [setIsLoading, setLikedMusic, setpinnedMusic, setToken]);
 
@@ -117,7 +118,13 @@ function App() {
         </div>
         <div className="row">
           {tracks.map((element) => {
-            return <Card key={element.id} element={element} />;
+            return (
+              <Card
+                key={element.id}
+                element={element}
+                currentPlayingUrl={currentPlayingUrl}
+              />
+            );
           })}
         </div>
         <div className="row" hidden={tracks.length === 0}>
